@@ -62,16 +62,16 @@ export default function MemoryGame() {
   }, [flippedIndices, cards]);
 
   const handleCardClick = (index: number) => {
-    if (flippedIndices.length >= 2 || cards[index].isFlipped) return;
+    if (flippedIndices.length >= 2 || cards[index].isFlipped || cards[index].isMatched) return;
 
     setCards(prev => prev.map((card, i) => i === index ? { ...card, isFlipped: true } : card));
     setFlippedIndices(prev => [...prev, index]);
   };
   
-  const allMatched = cards.every(card => card.isMatched);
+  const allMatched = cards.length > 0 && cards.every(card => card.isMatched);
 
   return (
-    <Card className="w-full max-w-xl bg-card/80 backdrop-blur-sm shadow-2xl rounded-2xl">
+    <Card className="w-full max-w-2xl bg-card/80 backdrop-blur-sm shadow-2xl rounded-2xl">
       <CardHeader>
         <CardTitle className="text-center text-3xl font-headline">Memory Game</CardTitle>
       </CardHeader>

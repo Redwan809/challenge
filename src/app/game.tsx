@@ -27,7 +27,7 @@ export default function Game() {
   const [baseOffset, setBaseOffset] = useState(115);
 
   useEffect(() => {
-    const getOffset = () => (window.innerWidth < 768 ? 95 : 115);
+    const getOffset = () => (window.innerWidth < 640 ? 95 : 115);
 
     const handleResize = () => {
       setBaseOffset(getOffset());
@@ -96,7 +96,7 @@ export default function Game() {
   };
 
   return (
-    <Card className="w-full max-w-4xl bg-card/80 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden">
+    <Card className="w-full max-w-2xl bg-card/80 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden">
       <CardContent className="p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6 gap-4">
           <h3 className="font-bold text-lg order-2 sm:order-1">Score: <span className="text-primary font-headline text-2xl">{score}</span></h3>
