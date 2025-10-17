@@ -58,7 +58,8 @@ export default function Home() {
     }
   };
 
-  const resetToHome = () => {
+  const resetToHome = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     setActiveGame('none');
   };
 
