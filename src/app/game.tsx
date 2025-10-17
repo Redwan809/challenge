@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { GiftBox } from '@/components/game/gift-box';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -26,7 +26,8 @@ export default function Game() {
 
   const boxPositions = useMemo(() => {
     const positions: { [key: number]: string } = {};
-    const baseOffset = 115;
+    // Use a smaller offset for mobile and larger for desktop
+    const baseOffset = typeof window !== 'undefined' && window.innerWidth < 768 ? 95 : 115;
     boxOrder.forEach((id, index) => {
       const position = (index - Math.floor(BOX_COUNT / 2)) * baseOffset;
       positions[id] = `${position}%`;
@@ -82,20 +83,18 @@ export default function Game() {
     }
   };
 
-  const isGameInProgress = status === 'shuffling' || status === 'placing' || status === 'selecting';
-
   return (
     <Card className="w-full max-w-4xl bg-card/80 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden">
-      <CardContent className="p-4 sm:p-6 md:p-8">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="font-bold text-lg">Score: <span className="text-primary font-headline text-2xl">{score}</span></h3>
-          <div className="text-center h-12 flex items-center justify-center font-bold text-lg animate-bounce-in">
+      <CardContent className="p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6 gap-4">
+          <h3 className="font-bold text-lg order-2 sm:order-1">Score: <span className="text-primary font-headline text-2xl">{score}</span></h3>
+          <div className="text-center min-h-[2.5rem] flex items-center justify-center font-bold text-base sm:text-lg animate-bounce-in order-1 sm:order-2">
             {message.icon}
             <span className="ml-2">{message.text}</span>
           </div>
         </div>
 
-        <div className="relative flex justify-center items-end h-48 w-full mb-8">
+        <div className="relative flex justify-center items-end h-36 sm:h-48 w-full mb-6 sm:mb-8">
           {boxes.map((box, i) => (
             <div
               key={box.id}
@@ -114,7 +113,7 @@ export default function Game() {
 
           {status === 'placing' && isAnimatingBall && (
              <div className="absolute bottom-1/2 z-20" style={{ animation: 'place-ball 1.5s ease-in-out forwards' }}>
-                <BallIcon className="w-8 h-8"/>
+                <BallIcon className="w-6 h-6 sm:w-8 sm:h-8"/>
              </div>
           )}
         </div>
@@ -124,13 +123,13 @@ export default function Game() {
             <Button
               size="lg"
               onClick={handleStart}
-              className="font-bold text-xl shadow-lg transform hover:scale-105 transition-transform"
+              className="font-bold text-lg sm:text-xl shadow-lg transform hover:scale-105 transition-transform"
             >
               {status === 'initial' ? 'Start Game' : 'Play Again'}
               {status === 'initial' ? <ArrowRight className="ml-2" /> : <RefreshCw className="ml-2" />}
             </Button>
           ) : (
-            <Button size="lg" disabled className="font-bold text-xl">
+            <Button size="lg" disabled className="font-bold text-lg sm:text-xl">
               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-foreground mr-2"></div>
               {status === 'placing' ? 'Placing Ball...' : 'Shuffling...'}
             </Button>
@@ -139,11 +138,20 @@ export default function Game() {
       </CardContent>
        <style jsx>{`
         @keyframes place-ball {
-          0% { transform: translateY(-100px) scale(1); opacity: 1; }
-          50% { transform: translateY(20px) scale(1); opacity: 1; }
-          100% { transform: translateY(20px) scale(0); opacity: 0; }
+          0% { transform: translateY(-80px) scale(1); opacity: 1; }
+          50% { transform: translateY(16px) scale(1); opacity: 1; }
+          100% { transform: translateY(16px) scale(0); opacity: 0; }
+        }
+        @media (min-width: 640px) {
+          @keyframes place-ball {
+            0% { transform: translateY(-100px) scale(1); opacity: 1; }
+            50% { transform: translateY(20px) scale(1); opacity: 1; }
+            100% { transform: translateY(20px) scale(0); opacity: 0; }
+          }
         }
       `}</style>
     </Card>
   );
 }
+
+    
