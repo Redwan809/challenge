@@ -1,7 +1,6 @@
 import type {Metadata} from 'next';
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
-import { BottomNav } from '@/components/bottom-nav';
 import { Header } from '@/components/header';
 import { cn } from '@/lib/utils';
 
@@ -26,10 +25,9 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased overflow-hidden">
         <Header />
-        <div id="main-content" className="h-screen overflow-y-auto pb-24">
+        <div id="main-content" className="h-screen overflow-y-auto">
           {children}
         </div>
-        <BottomNav />
         <Toaster />
       </body>
     </html>
