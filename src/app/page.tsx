@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Game from './game';
 import GuessingGame from './guessing-game';
 import RockPaperScissors from './rock-paper-scissors';
@@ -17,6 +17,16 @@ type ActiveGame = 'none' | 'mystery-box' | 'guessing-game' | 'rock-paper-scissor
 
 export default function Home() {
   const [activeGame, setActiveGame] = useState<ActiveGame>('none');
+
+  useEffect(() => {
+    if (activeGame !== 'none') {
+      document.body.classList.add('overflow-hidden');
+      document.getElementById('main-content')?.classList.remove('overflow-y-auto');
+    } else {
+      document.body.classList.remove('overflow-hidden');
+      document.getElementById('main-content')?.classList.add('overflow-y-auto');
+    }
+  }, [activeGame]);
 
   const games = [
     { id: 'mystery-box', icon: <Gift className="w-12 h-12 text-primary" />, name: 'Mystery Box' },
@@ -67,8 +77,7 @@ export default function Home() {
   return (
     <main 
       className={cn(
-        "flex min-h-screen w-full flex-col items-center justify-center p-4 sm:p-8 relative",
-        activeGame !== 'none' && "overflow-hidden"
+        "flex min-h-screen w-full flex-col items-center justify-center p-4 sm:p-8 relative"
       )}
     >
        {activeGame !== 'none' && (

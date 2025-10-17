@@ -3,6 +3,7 @@ import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 import { BottomNav } from '@/components/bottom-nav';
 import { Header } from '@/components/header';
+import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: 'Mystery Box Challenge',
@@ -11,8 +12,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  bodyClassName,
 }: Readonly<{
   children: React.ReactNode;
+  bodyClassName?: string;
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -23,9 +26,9 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-body antialiased overflow-hidden">
+      <body className={cn("font-body antialiased", bodyClassName)}>
         <Header />
-        <div className="h-screen overflow-y-auto pb-20">
+        <div id="main-content" className="h-screen overflow-y-auto pb-20">
           {children}
         </div>
         <BottomNav />
