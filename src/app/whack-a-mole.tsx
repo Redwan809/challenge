@@ -14,12 +14,18 @@ export default function WhackAMole() {
   const [timeLeft, setTimeLeft] = useState(GAME_DURATION_S);
   const [activeMole, setActiveMole] = useState<number | null>(null);
   const [isGameActive, setIsGameActive] = useState(false);
+  const [isGameOver, setIsGameOver] = useState(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const gameLoopRef = useRef<NodeJS.Timeout | null>(null);
 
+  const popMole = useCallback(() => {
+    setActiveMole(Math.floor(Math.random() * 9));
+  }, []);
+
   const stopGame = useCallback(() => {
     setIsGameActive(false);
+    setIsGameOver(true);
     setActiveMole(null);
     if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -30,23 +36,19 @@ export default function WhackAMole() {
       gameLoopRef.current = null;
     }
   }, []);
-  
-  const popMole = useCallback(() => {
-    const newMole = Math.floor(Math.random() * 9);
-    setActiveMole(newMole);
-  }, []);
-
 
   const startGame = () => {
     setScore(0);
     setTimeLeft(GAME_DURATION_S);
+    setIsGameOver(false);
     setIsGameActive(true);
-    popMole();
   };
 
   useEffect(() => {
     if (isGameActive) {
-      // Game timer
+      popMole(); // Initial mole
+      gameLoopRef.current = setInterval(popMole, MOLE_APPEAR_SPEED_MS);
+
       timerRef.current = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 1) {
@@ -56,16 +58,14 @@ export default function WhackAMole() {
           return prev - 1;
         });
       }, 1000);
-      
-      // Mole appearance loop
-      gameLoopRef.current = setInterval(popMole, MOLE_APPEAR_SPEED_MS);
-
     } else {
-      stopGame();
+       if (timerRef.current) clearInterval(timerRef.current);
+       if (gameLoopRef.current) clearInterval(gameLoopRef.current);
     }
 
     return () => {
-      stopGame();
+      if (timerRef.current) clearInterval(timerRef.current);
+      if (gameLoopRef.current) clearInterval(gameLoopRef.current);
     };
   }, [isGameActive, popMole, stopGame]);
   
@@ -74,7 +74,7 @@ export default function WhackAMole() {
     if (index === activeMole && isGameActive) {
       setScore(prev => prev + 1);
       
-      // Immediately pop a new mole and reset interval
+      // Immediately pop a new mole and reset interval to keep it snappy
       if (gameLoopRef.current) {
          clearInterval(gameLoopRef.current);
       }
@@ -96,7 +96,13 @@ export default function WhackAMole() {
 
         <div className="grid grid-cols-3 gap-4 mb-6 aspect-square bg-green-800/50 p-4 rounded-lg">
           {Array.from({ length: 9 }).map((_, index) => (
-            <div key={index} className="w-full h-full bg-yellow-900/70 rounded-full flex items-center justify-center overflow-hidden cursor-pointer" onClick={() => whackMole(index)}>
+            <div 
+              key={index} 
+              className="w-full h-full bg-yellow-900/70 rounded-full flex items-center justify-center overflow-hidden cursor-pointer" 
+              onClick={() => whackMole(index)}
+              role="button"
+              aria-label={`mole-hole-${index}`}
+            >
                 <div className={`transform transition-transform duration-150 ${activeMole === index ? 'translate-y-0' : 'translate-y-full'}`}>
                     <Mole />
                 </div>
@@ -104,15 +110,17 @@ export default function WhackAMole() {
           ))}
         </div>
         
-        {!isGameActive ? (
+        {!isGameActive && (
           <Button onClick={startGame} size="lg" className="w-full font-bold">
-             {timeLeft === 0 && score > 0 ? <><RefreshCw className="mr-2 h-4 w-4" />Play Again</> : 'Start Game'}
+             {isGameOver ? <><RefreshCw className="mr-2 h-4 w-4" />Play Again</> : 'Start Game'}
           </Button>
-        ) : (
-          <div className="text-center text-2xl font-bold text-primary animate-pulse h-11 flex items-center justify-center">
+        )}
+        {isGameActive && (
+           <div className="text-center text-2xl font-bold text-primary animate-pulse h-11 flex items-center justify-center">
             GO!
           </div>
         )}
+
       </CardContent>
     </Card>
   );
