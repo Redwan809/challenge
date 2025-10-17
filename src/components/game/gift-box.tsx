@@ -14,7 +14,7 @@ export const GiftBox = ({ hasBall, isRevealed, isSelected, isDisabled, onClick }
     <div
       onClick={isDisabled ? undefined : onClick}
       className={cn(
-        "relative w-28 h-28 sm:w-32 md:w-40 sm:h-32 md:h-40 cursor-pointer group transition-transform duration-300",
+        "relative w-28 h-28 cursor-pointer group transition-transform duration-300",
         !isDisabled && "hover:scale-110",
         isSelected && !isRevealed && "scale-110",
         isRevealed && !isSelected && "opacity-50 saturate-50 scale-90"

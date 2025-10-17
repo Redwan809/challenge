@@ -83,7 +83,7 @@ export default function MemoryGame() {
             </Button>
         </div>
 
-        <div className="grid grid-cols-4 gap-2 sm:gap-4 mb-6">
+        <div className="grid grid-cols-4 gap-2 mb-6">
           {cards.map((card, index) => (
             <div key={card.id} className="aspect-square" onClick={() => handleCardClick(index)}>
               <div className={cn(

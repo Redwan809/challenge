@@ -123,7 +123,7 @@ export default function SimonSays() {
                 ))}
             </div>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 bg-card rounded-full flex items-center justify-center">
-                 <p className="font-bold text-card-foreground text-3xl sm:text-4xl">SIMON</p>
+                 <p className="font-bold text-card-foreground text-3xl">SIMON</p>
             </div>
         </div>
 

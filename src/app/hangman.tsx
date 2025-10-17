@@ -34,9 +34,9 @@ export default function Hangman() {
   };
 
   const WordDisplay = () => (
-    <div className="flex justify-center gap-1 sm:gap-2 mb-8 text-2xl sm:text-4xl font-bold font-mono flex-wrap">
+    <div className="flex justify-center gap-1 mb-8 text-2xl font-bold font-mono flex-wrap">
       {word.split('').map((letter, index) => (
-        <span key={index} className="w-8 h-12 sm:w-12 sm:h-16 border-b-4 border-foreground flex items-center justify-center">
+        <span key={index} className="w-8 h-12 border-b-4 border-foreground flex items-center justify-center">
           {(guessedLetters.includes(letter) || isLoser) ? letter.toUpperCase() : ''}
         </span>
       ))}
@@ -54,7 +54,7 @@ export default function Hangman() {
     const bodyParts = [Head, Body, RightArm, LeftArm, RightLeg, LeftLeg];
 
     return (
-      <svg viewBox="0 0 250 250" className="w-32 h-32 sm:w-40 sm:h-40 mx-auto mb-4">
+      <svg viewBox="0 0 250 250" className="w-32 h-32 mx-auto mb-4">
           {/* Gallows */}
           <line x1="60" y1="230" x2="140" y2="230" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
           <line x1="100" y1="230" x2="100" y2="50" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
@@ -71,14 +71,14 @@ export default function Hangman() {
       <CardHeader>
         <CardTitle className="text-center text-3xl font-headline">Hangman</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col items-center p-4 sm:p-6">
+      <CardContent className="flex flex-col items-center p-4">
         <HangmanDrawing />
         {isGameOver ? (
             <div className="text-center mb-8">
-                <p className={`text-2xl sm:text-3xl font-bold mb-2 ${isWinner ? 'text-primary' : 'text-destructive'}`}>
+                <p className={`text-2xl font-bold mb-2 ${isWinner ? 'text-primary' : 'text-destructive'}`}>
                     {isWinner ? 'You Win!' : 'You Lose!'}
                 </p>
-                <p className="text-lg sm:text-xl">The word was: <span className="font-bold text-primary">{word.toUpperCase()}</span></p>
+                <p className="text-lg">The word was: <span className="font-bold text-primary">{word.toUpperCase()}</span></p>
             </div>
         ) : (
             <WordDisplay />
@@ -89,7 +89,7 @@ export default function Hangman() {
               <RefreshCw className="mr-2 h-4 w-4" /> Play Again
           </Button>
         ) : (
-          <div className="flex flex-wrap justify-center gap-1 sm:gap-2">
+          <div className="flex flex-wrap justify-center gap-1">
             {alphabet.map(letter => {
               const isGuessed = guessedLetters.includes(letter);
               return (
@@ -97,7 +97,7 @@ export default function Hangman() {
                   key={letter}
                   variant="outline"
                   size="icon"
-                  className="w-8 h-8 sm:w-9 sm:h-9 text-base sm:text-lg"
+                  className="w-8 h-8 text-base"
                   disabled={isGuessed}
                   onClick={() => handleGuess(letter)}
                 >

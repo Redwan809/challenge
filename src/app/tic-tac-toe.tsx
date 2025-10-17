@@ -165,7 +165,7 @@ export default function TicTacToe() {
     >
       {value && (
         <span className={cn(
-          "text-5xl sm:text-7xl font-extrabold animate-bounce-in",
+          "text-5xl font-extrabold animate-bounce-in",
           value === 'X' ? 'text-primary' : 'text-destructive'
         )}>
           {value}
@@ -182,13 +182,13 @@ export default function TicTacToe() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-            <div className="flex gap-4 font-bold text-sm sm:text-base order-2 sm:order-1 w-full sm:w-auto">
+        <div className="flex flex-col justify-between items-center mb-4 gap-4">
+            <div className="flex gap-4 font-bold text-base order-2 w-full">
                 <p className="flex items-center gap-1"><User /> You: <span className="text-primary">{scores.player}</span></p>
                 <p className="flex items-center gap-1"><Bot /> AI: <span className="text-destructive">{scores.ai}</span></p>
                 <p>Draw: {scores.draw}</p>
             </div>
-             <div className="flex items-center gap-2 order-1 sm:order-2">
+             <div className="flex items-center gap-2 order-1">
                 <Label htmlFor="difficulty-select">Difficulty:</Label>
                 <Select value={difficulty} onValueChange={(value) => setDifficulty(value as Difficulty)}>
                     <SelectTrigger className="w-[120px]" id="difficulty-select">

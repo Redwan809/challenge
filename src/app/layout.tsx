@@ -23,9 +23,9 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-body antialiased overflow-hidden">
+      <body className="font-body antialiased">
         <Header />
-        <div id="main-content" className="h-screen overflow-y-auto">
+        <div id="main-content" className="h-screen">
           {children}
         </div>
         <Toaster />

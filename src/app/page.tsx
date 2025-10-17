@@ -23,10 +23,8 @@ export default function Home() {
     const mainContent = document.getElementById('main-content');
     if (mainContent) {
       if (activeGame !== 'none') {
-        mainContent.classList.remove('overflow-y-auto');
         mainContent.classList.add('overflow-hidden');
       } else {
-        mainContent.classList.add('overflow-y-auto');
         mainContent.classList.remove('overflow-hidden');
       }
     }
@@ -64,7 +62,7 @@ export default function Home() {
               >
                 <div className="p-6 bg-card/80 backdrop-blur-sm rounded-3xl shadow-2xl transform group-hover:scale-110 transition-transform duration-300 w-full aspect-square flex flex-col justify-center items-center text-primary">
                   {game.icon}
-                  <p className="mt-2 text-sm sm:text-base font-bold text-foreground/80 text-center">{game.name}</p>
+                  <p className="mt-2 text-sm font-bold text-foreground/80 text-center">{game.name}</p>
                 </div>
               </div>
             ))}
@@ -81,11 +79,11 @@ export default function Home() {
   return (
     <main 
       className={cn(
-        "flex min-h-full w-full flex-col items-center justify-center p-4 sm:p-8 relative"
+        "flex min-h-full w-full flex-col items-center justify-center p-4 relative"
       )}
     >
        {activeGame !== 'none' && (
-         <Button onClick={resetToHome} variant="ghost" size="icon" className="absolute top-20 left-4 sm:left-6 z-50 bg-card/50 backdrop-blur-sm hover:bg-card/80">
+         <Button onClick={resetToHome} variant="ghost" size="icon" className="absolute top-20 left-4 z-50 bg-card/50 backdrop-blur-sm hover:bg-card/80">
             <ArrowLeft className="w-6 h-6 text-primary" />
             <span className="sr-only">Back to Games</span>
          </Button>

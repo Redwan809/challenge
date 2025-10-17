@@ -144,7 +144,9 @@ export default function Game() {
 
     if (correct) {
       setMessage({ text: `Correct! Well done! 🎉`, icon: <PartyPopper className="text-primary" /> });
-      setShowConfetti(true);
+      if (isMounted.current) {
+        setShowConfetti(true);
+      }
       if (level >= highScore) {
         const newHighScore = level;
         setHighScore(newHighScore);
@@ -166,19 +168,19 @@ export default function Game() {
     <>
       {showConfetti && windowSize.width > 0 && isMounted.current && <Confetti width={windowSize.width} height={windowSize.height} recycle={false} numberOfPieces={200} />}
       <Card className="w-full max-w-4xl bg-card/80 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden">
-        <CardContent className="p-4 sm:p-6">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6 gap-4">
-            <div className="flex gap-4 order-2 sm:order-1 text-center">
+        <CardContent className="p-4">
+          <div className="flex flex-col justify-between items-center mb-4 gap-4">
+            <div className="flex gap-4 order-2 text-center">
                 <h3 className="font-bold text-lg">Level: <span className="text-primary font-headline text-2xl">{level}</span></h3>
                 <h3 className="font-bold text-lg flex items-center gap-1"><Trophy className="text-accent"/> High Score: <span className="text-primary font-headline text-2xl">{highScore}</span></h3>
             </div>
-            <div className="text-center min-h-[2.5rem] flex items-center justify-center font-bold text-base sm:text-lg animate-bounce-in order-1 sm:order-2">
+            <div className="text-center min-h-[2.5rem] flex items-center justify-center font-bold text-base animate-bounce-in order-1">
               {message.icon}
               <span className="ml-2">{message.text}</span>
             </div>
           </div>
 
-          <div className="relative flex justify-center items-center h-48 sm:h-56 w-full mb-6 sm:mb-8">
+          <div className="relative flex justify-center items-center h-48 w-full mb-6">
             {Array.from({ length: boxCount }, (_, id) => (
               <div
                 key={id}
@@ -204,29 +206,29 @@ export default function Game() {
                   animation: 'place-ball 1.5s ease-in-out forwards',
                   transform: `translateX(${boxPositions[ballBoxId]}%)`
                 }}>
-                  <BallIcon className="w-6 h-6 sm:w-8 sm:h-8"/>
+                  <BallIcon className="w-6 h-6"/>
                </div>
             )}
           </div>
 
           <div className="flex justify-center h-11">
             {status === 'initial' && (
-              <Button size="lg" onClick={handleStart} className="font-bold text-lg sm:text-xl shadow-lg transform hover:scale-105 transition-transform">
+              <Button size="lg" onClick={handleStart} className="font-bold text-lg shadow-lg transform hover:scale-105 transition-transform">
                 Start Game <ArrowRight className="ml-2" />
               </Button>
             )}
             {status === 'revealed' && !isGameOver && (
-              <Button size="lg" onClick={handleNextLevel} className="font-bold text-lg sm:text-xl shadow-lg transform hover:scale-105 transition-transform">
+              <Button size="lg" onClick={handleNextLevel} className="font-bold text-lg shadow-lg transform hover:scale-105 transition-transform">
                 Next Level <ArrowRight className="ml-2" />
               </Button>
             )}
             {isGameOver && (
-              <Button size="lg" onClick={handleStart} className="font-bold text-lg sm:text-xl shadow-lg transform hover:scale-105 transition-transform">
+              <Button size="lg" onClick={handleStart} className="font-bold text-lg shadow-lg transform hover:scale-105 transition-transform">
                 Play Again <RefreshCw className="ml-2" />
               </Button>
             )}
             {(status === 'placing' || status === 'shuffling') && (
-              <Button size="lg" disabled className="font-bold text-lg sm:text-xl">
+              <Button size="lg" disabled className="font-bold text-lg">
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-foreground mr-2"></div>
                 {status === 'placing' ? 'Placing Ball...' : 'Shuffling...'}
               </Button>
@@ -238,13 +240,6 @@ export default function Game() {
             0% { transform: translate(${boxPositions[ballBoxId]}%, -100px) scale(1.2); opacity: 1; }
             50% { transform: translate(${boxPositions[ballBoxId]}%, 24px) scale(1); opacity: 1; }
             100% { transform: translate(${boxPositions[ballBoxId]}%, 24px) scale(0); opacity: 0; }
-          }
-          @media (min-width: 640px) {
-            @keyframes place-ball {
-              0% { transform: translate(${boxPositions[ballBoxId]}%, -120px) scale(1.2); opacity: 1; }
-              50% { transform: translate(${boxPositions[ballBoxId]}%, 30px) scale(1); opacity: 1; }
-              100% { transform: translate(${boxPositions[ballBoxId]}%, 30px) scale(0); opacity: 0; }
-            }
           }
         `}</style>
       </Card>
