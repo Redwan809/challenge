@@ -10,8 +10,9 @@ import MemoryGame from './memory-game';
 import WhackAMole from './whack-a-mole';
 import Hangman from './hangman';
 import SimonSays from './simon-says';
-import { Gift, Puzzle, Hand, BrainCircuit, Hammer, VenetianMask, Gamepad2, Brain } from 'lucide-react';
+import { Gift, Puzzle, Hand, BrainCircuit, Hammer, VenetianMask, Gamepad2, Brain, ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 type ActiveGame = 'none' | 'mystery-box' | 'guessing-game' | 'rock-paper-scissors' | 'tic-tac-toe' | 'memory-game' | 'whack-a-mole' | 'hangman' | 'simon-says';
 
@@ -23,8 +24,10 @@ export default function Home() {
     if (mainContent) {
       if (activeGame !== 'none') {
         mainContent.classList.remove('overflow-y-auto');
+        mainContent.classList.add('overflow-hidden');
       } else {
         mainContent.classList.add('overflow-y-auto');
+        mainContent.classList.remove('overflow-hidden');
       }
     }
   }, [activeGame]);
@@ -78,13 +81,14 @@ export default function Home() {
   return (
     <main 
       className={cn(
-        "flex min-h-screen w-full flex-col items-center justify-center p-4 sm:p-8 relative"
+        "flex min-h-full w-full flex-col items-center justify-center p-4 sm:p-8 relative"
       )}
     >
        {activeGame !== 'none' && (
-         <button onClick={resetToHome} className="absolute top-24 left-4 text-primary font-bold z-50 bg-card/80 px-3 py-1 rounded-full shadow-md hover:bg-card transition-colors">
-           &larr; Back to Games
-         </button>
+         <Button onClick={resetToHome} variant="ghost" size="icon" className="absolute top-20 left-4 sm:left-6 z-50 bg-card/50 backdrop-blur-sm hover:bg-card/80">
+            <ArrowLeft className="w-6 h-6 text-primary" />
+            <span className="sr-only">Back to Games</span>
+         </Button>
       )}
       {renderGame()}
     </main>

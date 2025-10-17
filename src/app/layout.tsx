@@ -26,7 +26,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased overflow-hidden">
         <Header />
-        <div id="main-content" className="h-screen overflow-y-auto pb-20">
+        <div id="main-content" className="h-screen overflow-y-auto pb-24">
           {children}
         </div>
         <BottomNav />
