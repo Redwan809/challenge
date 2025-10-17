@@ -98,7 +98,7 @@ export default function WhackAMole() {
           {Array.from({ length: 9 }).map((_, index) => (
             <div 
               key={index} 
-              className="w-full h-full bg-yellow-900/70 rounded-full flex items-center justify-center overflow-hidden cursor-pointer" 
+              className="w-full h-full bg-yellow-900/70 rounded-full flex items-center justify-center overflow-hidden cursor-pointer group" 
               onClick={() => whackMole(index)}
               role="button"
               aria-label={`mole-hole-${index}`}
@@ -106,6 +106,7 @@ export default function WhackAMole() {
                 <div className={`transform transition-transform duration-150 ${activeMole === index ? 'translate-y-0' : 'translate-y-full'}`}>
                     <Mole />
                 </div>
+                <Hammer className={`absolute text-white/70 w-8 h-8 opacity-0 group-active:opacity-100 transform -rotate-45 -translate-x-4 -translate-y-2 transition-opacity`}/>
             </div>
           ))}
         </div>
@@ -127,12 +128,11 @@ export default function WhackAMole() {
 }
 
 const Mole = () => (
-    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-yellow-600 rounded-t-full border-4 border-yellow-800 flex flex-col items-center group">
+    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-yellow-600 rounded-t-full border-4 border-yellow-800 flex flex-col items-center">
         <div className="w-full flex justify-around mt-4">
             <div className="w-3 h-3 bg-black rounded-full"></div>
             <div className="w-3 h-3 bg-black rounded-full"></div>
         </div>
         <div className="w-4 h-2 bg-black rounded-full mt-2"></div>
-        <Hammer className="absolute text-white/70 w-8 h-8 opacity-0 group-hover:opacity-100 transform -rotate-45 -translate-x-4 -translate-y-2 transition-opacity"/>
     </div>
 );
