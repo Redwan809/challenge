@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Hammer, RefreshCw } from 'lucide-react';
 
 const GAME_DURATION_S = 30;
+const MOLE_APPEAR_SPEED_MS = 800;
 
 export default function WhackAMole() {
   const [score, setScore] = useState(0);
@@ -17,40 +18,35 @@ export default function WhackAMole() {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const gameLoopRef = useRef<NodeJS.Timeout | null>(null);
 
+  const stopGame = useCallback(() => {
+    setIsGameActive(false);
+    setActiveMole(null);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    if (gameLoopRef.current) {
+      clearInterval(gameLoopRef.current);
+      gameLoopRef.current = null;
+    }
+  }, []);
+  
+  const popMole = useCallback(() => {
+    const newMole = Math.floor(Math.random() * 9);
+    setActiveMole(newMole);
+  }, []);
+
+
   const startGame = () => {
     setScore(0);
     setTimeLeft(GAME_DURATION_S);
     setIsGameActive(true);
-    setActiveMole(null);
+    popMole();
   };
-
-  const stopGame = useCallback(() => {
-    setIsGameActive(false);
-    setActiveMole(null);
-    if (timerRef.current) clearInterval(timerRef.current);
-    if (gameLoopRef.current) clearInterval(gameLoopRef.current);
-  }, []);
-
-
-  const whackMole = (index: number) => {
-    if (index === activeMole && isGameActive) {
-      setScore(prev => prev + 1);
-      setActiveMole(null);
-       if (gameLoopRef.current) {
-         clearInterval(gameLoopRef.current);
-         gameLoopRef.current = setInterval(getRandomMole, 800);
-       }
-    }
-  };
-
-  const getRandomMole = useCallback(() => {
-      let newMole = Math.floor(Math.random() * 9);
-      setActiveMole(newMole);
-  }, []);
 
   useEffect(() => {
     if (isGameActive) {
-      gameLoopRef.current = setInterval(getRandomMole, 800);
+      // Game timer
       timerRef.current = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 1) {
@@ -60,14 +56,32 @@ export default function WhackAMole() {
           return prev - 1;
         });
       }, 1000);
+      
+      // Mole appearance loop
+      gameLoopRef.current = setInterval(popMole, MOLE_APPEAR_SPEED_MS);
+
     } else {
-        stopGame();
+      stopGame();
     }
 
     return () => {
       stopGame();
     };
-  }, [isGameActive, getRandomMole, stopGame]);
+  }, [isGameActive, popMole, stopGame]);
+  
+
+  const whackMole = (index: number) => {
+    if (index === activeMole && isGameActive) {
+      setScore(prev => prev + 1);
+      
+      // Immediately pop a new mole and reset interval
+      if (gameLoopRef.current) {
+         clearInterval(gameLoopRef.current);
+      }
+      popMole();
+      gameLoopRef.current = setInterval(popMole, MOLE_APPEAR_SPEED_MS);
+    }
+  };
   
   return (
     <Card className="w-full max-w-xl bg-card/80 backdrop-blur-sm shadow-2xl rounded-2xl">
@@ -82,7 +96,7 @@ export default function WhackAMole() {
 
         <div className="grid grid-cols-3 gap-4 mb-6 aspect-square bg-green-800/50 p-4 rounded-lg">
           {Array.from({ length: 9 }).map((_, index) => (
-            <div key={index} className="w-full h-full bg-yellow-900/70 rounded-full flex items-center justify-center overflow-hidden" onClick={() => whackMole(index)}>
+            <div key={index} className="w-full h-full bg-yellow-900/70 rounded-full flex items-center justify-center overflow-hidden cursor-pointer" onClick={() => whackMole(index)}>
                 <div className={`transform transition-transform duration-150 ${activeMole === index ? 'translate-y-0' : 'translate-y-full'}`}>
                     <Mole />
                 </div>
@@ -92,7 +106,7 @@ export default function WhackAMole() {
         
         {!isGameActive ? (
           <Button onClick={startGame} size="lg" className="w-full font-bold">
-             {timeLeft === 0 ? <><RefreshCw className="mr-2 h-4 w-4" />Play Again</> : 'Start Game'}
+             {timeLeft === 0 && score > 0 ? <><RefreshCw className="mr-2 h-4 w-4" />Play Again</> : 'Start Game'}
           </Button>
         ) : (
           <div className="text-center text-2xl font-bold text-primary animate-pulse h-11 flex items-center justify-center">
@@ -105,7 +119,7 @@ export default function WhackAMole() {
 }
 
 const Mole = () => (
-    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-yellow-600 rounded-t-full border-4 border-yellow-800 flex flex-col items-center cursor-pointer group">
+    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-yellow-600 rounded-t-full border-4 border-yellow-800 flex flex-col items-center group">
         <div className="w-full flex justify-around mt-4">
             <div className="w-3 h-3 bg-black rounded-full"></div>
             <div className="w-3 h-3 bg-black rounded-full"></div>
