@@ -85,7 +85,7 @@ export default function Hangman() {
         )}
 
         {isGameOver ? (
-          <Button onClick={startNewGame} size="lg">
+          <Button onClick={startNewGame} size="lg" className="animate-bounce-in">
               <RefreshCw className="mr-2 h-4 w-4" /> Play Again
           </Button>
         ) : (

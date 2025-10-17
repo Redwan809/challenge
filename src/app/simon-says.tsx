@@ -128,7 +128,7 @@ export default function SimonSays() {
         </div>
 
         {status === 'start' || status === 'gameover' ? (
-          <Button onClick={startGame} size="lg" className="w-full">
+          <Button onClick={startGame} size="lg" className="w-full animate-bounce-in">
             {status === 'start' ? 'Start Game' : <><RefreshCw className="mr-2 h-4 w-4"/>Play Again</>}
           </Button>
         ) : (

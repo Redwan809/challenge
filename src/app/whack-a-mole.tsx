@@ -128,7 +128,7 @@ export default function WhackAMole() {
 }
 
 const Mole = () => (
-    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-yellow-600 rounded-t-full border-4 border-yellow-800 flex flex-col items-center">
+    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-amber-700 rounded-t-full border-4 border-amber-900 flex flex-col items-center">
         <div className="w-full flex justify-around mt-4">
             <div className="w-3 h-3 bg-black rounded-full"></div>
             <div className="w-3 h-3 bg-black rounded-full"></div>

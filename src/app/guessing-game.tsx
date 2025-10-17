@@ -97,7 +97,7 @@ export default function GuessingGame() {
             <Button onClick={handleGuess} disabled={gameOver} size="lg">Guess</Button>
           </div>
         ) : (
-          <Button onClick={startNewGame} size="lg" className="w-full font-bold">
+          <Button onClick={startNewGame} size="lg" className="w-full font-bold animate-bounce-in">
             <RefreshCw className="mr-2 h-4 w-4" /> Play Again
           </Button>
         )}
