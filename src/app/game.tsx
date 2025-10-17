@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { GiftBox } from '@/components/game/gift-box';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -23,17 +23,28 @@ export default function Game() {
   const [selectedBox, setSelectedBox] = useState<number | null>(null);
   const [message, setMessage] = useState<{ text: string; icon: React.ReactNode }>({ text: 'Click Start to Play!', icon: <PartyPopper className="text-accent-foreground" /> });
   const [isAnimatingBall, setIsAnimatingBall] = useState(false);
+  const [baseOffset, setBaseOffset] = useState(115);
+
+  useEffect(() => {
+    const getOffset = () => (window.innerWidth < 768 ? 95 : 115);
+
+    const handleResize = () => {
+      setBaseOffset(getOffset());
+    };
+
+    handleResize(); // Set initial value
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const boxPositions = useMemo(() => {
     const positions: { [key: number]: string } = {};
-    // Use a smaller offset for mobile and larger for desktop
-    const baseOffset = typeof window !== 'undefined' && window.innerWidth < 768 ? 95 : 115;
     boxOrder.forEach((id, index) => {
       const position = (index - Math.floor(BOX_COUNT / 2)) * baseOffset;
       positions[id] = `${position}%`;
     });
     return positions;
-  }, [boxOrder]);
+  }, [boxOrder, baseOffset]);
 
   const handleShuffle = useCallback(async () => {
     setStatus('shuffling');
@@ -153,5 +164,3 @@ export default function Game() {
     </Card>
   );
 }
-
-    
