@@ -1,7 +1,8 @@
 import type {Metadata} from 'next';
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
-import { SidebarProvider } from '@/components/ui/sidebar';
+import { BottomNav } from '@/components/bottom-nav';
+import { Header } from '@/components/header';
 
 export const metadata: Metadata = {
   title: 'Mystery Box Challenge',
@@ -22,9 +23,11 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        <SidebarProvider>
+        <Header />
+        <div className="pb-20">
           {children}
-        </SidebarProvider>
+        </div>
+        <BottomNav />
         <Toaster />
       </body>
     </html>
