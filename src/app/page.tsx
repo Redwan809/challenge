@@ -18,14 +18,14 @@ export default function Home() {
   const [activeGame, setActiveGame] = useState<ActiveGame>('none');
 
   const games = [
-    { id: 'mystery-box', icon: <Gift className="w-16 h-16 sm:w-24 sm:h-24 text-primary" />, name: 'Mystery Box' },
-    { id: 'guessing-game', icon: <Puzzle className="w-16 h-16 sm:w-24 sm:h-24 text-primary" />, name: 'Guess It' },
-    { id: 'rock-paper-scissors', icon: <Hand className="w-16 h-16 sm:w-24 sm:h-24 text-primary" />, name: 'R-P-S' },
-    { id: 'tic-tac-toe', icon: <Gamepad2 className="w-16 h-16 sm:w-24 sm:h-24 text-primary" />, name: 'Tic Tac Toe' },
-    { id: 'memory-game', icon: <BrainCircuit className="w-16 h-16 sm:w-24 sm:h-24 text-primary" />, name: 'Memory' },
-    { id: 'whack-a-mole', icon: <Hammer className="w-16 h-16 sm:w-24 sm:h-24 text-primary" />, name: 'Whack-a-Mole' },
-    { id: 'hangman', icon: <VenetianMask className="w-16 h-16 sm:w-24 sm:h-24 text-primary" />, name: 'Hangman' },
-    { id: 'simon-says', icon: <Brain className="w-16 h-16 sm:w-24 sm:h-24 text-primary" />, name: 'Simon Says' },
+    { id: 'mystery-box', icon: <Gift className="w-12 h-12 text-primary" />, name: 'Mystery Box' },
+    { id: 'guessing-game', icon: <Puzzle className="w-12 h-12 text-primary" />, name: 'Guess It' },
+    { id: 'rock-paper-scissors', icon: <Hand className="w-12 h-12 text-primary" />, name: 'R-P-S' },
+    { id: 'tic-tac-toe', icon: <Gamepad2 className="w-12 h-12 text-primary" />, name: 'Tic Tac Toe' },
+    { id: 'memory-game', icon: <BrainCircuit className="w-12 h-12 text-primary" />, name: 'Memory' },
+    { id: 'whack-a-mole', icon: <Hammer className="w-12 h-12 text-primary" />, name: 'Whack-a-Mole' },
+    { id: 'hangman', icon: <VenetianMask className="w-12 h-12 text-primary" />, name: 'Hangman' },
+    { id: 'simon-says', icon: <Brain className="w-12 h-12 text-primary" />, name: 'Simon Says' },
   ];
 
   const renderGame = () => {
@@ -40,17 +40,17 @@ export default function Home() {
       case 'simon-says': return <SimonSays />;
       default:
         return (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8">
+          <div className="grid grid-cols-2 gap-4 w-full max-w-md">
             {games.map(game => (
               <div 
                 key={game.id}
                 className="flex flex-col items-center justify-center cursor-pointer group"
                 onClick={() => setActiveGame(game.id as ActiveGame)}
               >
-                <div className="p-6 sm:p-8 bg-card/80 backdrop-blur-sm rounded-3xl shadow-2xl transform group-hover:scale-110 transition-transform duration-300">
+                <div className="p-6 bg-card/80 backdrop-blur-sm rounded-3xl shadow-2xl transform group-hover:scale-110 transition-transform duration-300 w-full aspect-square flex flex-col justify-center items-center">
                   {game.icon}
+                  <p className="mt-2 text-sm sm:text-base font-bold text-foreground/80 text-center">{game.name}</p>
                 </div>
-                <p className="mt-2 text-sm sm:text-base font-bold text-foreground/80">{game.name}</p>
               </div>
             ))}
           </div>
