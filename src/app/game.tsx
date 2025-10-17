@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { GiftBox } from '@/components/game/gift-box';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -17,55 +17,54 @@ const SHUFFLE_SPEED_MS = 400;
 export default function Game() {
   const [score, setScore] = useState(0);
   const [status, setStatus] = useState<GameStatus>('initial');
-  const [boxes, setBoxes] = useState<{ id: number; hasBall: boolean }[]>(
-    Array.from({ length: BOX_COUNT }, (_, i) => ({ id: i, hasBall: i === Math.floor(BOX_COUNT / 2) }))
-  );
-  const [boxOrder, setBoxOrder] = useState<number[]>(Array.from({ length: BOX_COUNT }, (_, i) => i));
+  
+  // Simplified state: just the winning box ID
+  const [ballBoxId, setBallBoxId] = useState(1); 
+
+  const [boxOrder, setBoxOrder] = useState<number[]>([0, 1, 2]);
   const [selectedBox, setSelectedBox] = useState<number | null>(null);
   const [message, setMessage] = useState<{ text: string; icon: React.ReactNode }>({ text: 'Click Start to Play!', icon: <PartyPopper className="text-accent-foreground" /> });
   const [isAnimatingBall, setIsAnimatingBall] = useState(false);
-  const [baseOffset, setBaseOffset] = useState(115);
 
-  useEffect(() => {
-    const getOffset = () => (window.innerWidth < 640 ? 95 : 115);
-
-    const handleResize = () => {
-      setBaseOffset(getOffset());
-    };
-
-    handleResize(); // Set initial value
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
+  // Position calculation is now more robust with useMemo
   const boxPositions = useMemo(() => {
-    const positions: { [key: number]: string } = {};
-    boxOrder.forEach((id, index) => {
-      const position = (index - Math.floor(BOX_COUNT / 2)) * baseOffset;
-      positions[id] = `${position}%`;
-    });
-    return positions;
-  }, [boxOrder, baseOffset]);
+    return boxOrder.map((id, index) => ({
+      id,
+      position: (index - Math.floor(BOX_COUNT / 2)) * 100, // Center-based percentage
+    }));
+  }, [boxOrder]);
 
-  const handleShuffle = useCallback(async () => {
+  const handleShuffle = useCallback(() => {
     setStatus('shuffling');
     setMessage({ text: 'Shuffling...', icon: null });
-
-    let currentOrder = [...boxOrder];
-    for (let i = 0; i < SHUFFLE_COUNT; i++) {
-      await new Promise((resolve) => setTimeout(resolve, SHUFFLE_SPEED_MS));
-      currentOrder.sort(() => Math.random() - 0.5);
-      setBoxOrder([...currentOrder]);
-    }
     
-    await new Promise((resolve) => setTimeout(resolve, SHUFFLE_SPEED_MS));
-    setStatus('selecting');
-    setMessage({ text: 'Where is the ball? Select a box!', icon: null });
+    // Using promises for a cleaner async flow without async/await in useCallback
+    let promise = Promise.resolve();
+    let currentOrder = [...boxOrder];
+
+    for (let i = 0; i < SHUFFLE_COUNT; i++) {
+        promise = promise.then(() => new Promise(resolve => {
+            setTimeout(() => {
+                currentOrder.sort(() => Math.random() - 0.5);
+                setBoxOrder([...currentOrder]);
+                resolve();
+            }, SHUFFLE_SPEED_MS);
+        }));
+    }
+
+    promise.then(() => {
+        setTimeout(() => {
+            setStatus('selecting');
+            setMessage({ text: 'Where is the ball? Select a box!', icon: null });
+        }, SHUFFLE_SPEED_MS);
+    });
   }, [boxOrder]);
+
 
   const handleStart = () => {
     setSelectedBox(null);
-    setBoxes(Array.from({ length: BOX_COUNT }, (_, i) => ({ id: i, hasBall: i === Math.floor(BOX_COUNT / 2) })));
+    const newBallBoxId = Math.floor(Math.random() * BOX_COUNT);
+    setBallBoxId(newBallBoxId);
     setBoxOrder(Array.from({ length: BOX_COUNT }, (_, i) => i));
 
     setStatus('placing');
@@ -78,14 +77,13 @@ export default function Game() {
     }, 1500);
   };
 
-  const handleSelectBox = (index: number) => {
+  const handleSelectBox = (boxId: number) => {
     if (status !== 'selecting') return;
     
-    const chosenBoxId = boxOrder[index];
-    setSelectedBox(index);
+    setSelectedBox(boxId);
     setStatus('revealed');
     
-    const correct = boxes.find(box => box.id === chosenBoxId)?.hasBall;
+    const correct = boxId === ballBoxId;
 
     if (correct) {
       setScore(prev => prev + 1);
@@ -107,24 +105,27 @@ export default function Game() {
         </div>
 
         <div className="relative flex justify-center items-end h-36 sm:h-48 w-full mb-6 sm:mb-8">
-          {boxes.map((box, i) => (
+          {boxPositions.map(({ id, position }) => (
             <div
-              key={box.id}
-              className="absolute transition-all duration-500 ease-in-out"
-              style={{ transform: `translateX(${boxPositions[box.id]})` }}
+              key={id}
+              className="absolute transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(${position}%)` }}
             >
               <GiftBox
-                hasBall={box.hasBall}
+                hasBall={id === ballBoxId}
                 isRevealed={status === 'revealed'}
-                isSelected={selectedBox !== null && boxOrder[selectedBox] === box.id}
-                onClick={() => handleSelectBox(i)}
+                isSelected={selectedBox === id}
+                onClick={() => handleSelectBox(id)}
                 isDisabled={status !== 'selecting'}
               />
             </div>
           ))}
 
-          {status === 'placing' && isAnimatingBall && (
-             <div className="absolute bottom-1/2 z-20" style={{ animation: 'place-ball 1.5s ease-in-out forwards' }}>
+          {(status === 'placing' && isAnimatingBall) && (
+             <div className="absolute bottom-1/2 z-20" style={{ 
+                animation: 'place-ball 1.5s ease-in-out forwards',
+                transform: `translateX(${(boxOrder.indexOf(ballBoxId) - Math.floor(BOX_COUNT / 2)) * 100}%)`
+              }}>
                 <BallIcon className="w-6 h-6 sm:w-8 sm:h-8"/>
              </div>
           )}
@@ -150,15 +151,15 @@ export default function Game() {
       </CardContent>
        <style jsx>{`
         @keyframes place-ball {
-          0% { transform: translateY(-80px) scale(1); opacity: 1; }
-          50% { transform: translateY(16px) scale(1); opacity: 1; }
-          100% { transform: translateY(16px) scale(0); opacity: 0; }
+          0% { transform: translate(0, -80px) scale(1); opacity: 1; }
+          50% { transform: translate(0, 16px) scale(1); opacity: 1; }
+          100% { transform: translate(0, 16px) scale(0); opacity: 0; }
         }
         @media (min-width: 640px) {
           @keyframes place-ball {
-            0% { transform: translateY(-100px) scale(1); opacity: 1; }
-            50% { transform: translateY(20px) scale(1); opacity: 1; }
-            100% { transform: translateY(20px) scale(0); opacity: 0; }
+            0% { transform: translate(0, -100px) scale(1); opacity: 1; }
+            50% { transform: translate(0, 20px) scale(1); opacity: 1; }
+            100% { transform: translate(0, 20px) scale(0); opacity: 0; }
           }
         }
       `}</style>

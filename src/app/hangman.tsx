@@ -36,29 +36,31 @@ export default function Hangman() {
     <div className="flex justify-center gap-1 sm:gap-2 mb-8 text-2xl sm:text-4xl font-bold font-mono flex-wrap">
       {word.split('').map((letter, index) => (
         <span key={index} className="w-8 h-12 sm:w-12 sm:h-16 border-b-4 border-foreground flex items-center justify-center">
-          {guessedLetters.includes(letter) || isLoser ? letter.toUpperCase() : '_'}
+          {(guessedLetters.includes(letter) || isLoser) ? letter.toUpperCase() : ''}
         </span>
       ))}
     </div>
   );
 
   const HangmanDrawing = () => {
-    const parts = [
-      <line key="base" x1="60" y1="210" x2="140" y2="210" stroke="currentColor" strokeWidth="4" />, // Base
-      <line key="pole" x1="100" y1="210" x2="100" y2="50" stroke="currentColor" strokeWidth="4" />, // Pole
-      <line key="beam" x1="100" y1="50" x2="180" y2="50" stroke="currentColor" strokeWidth="4" />, // Beam
-      <line key="rope" x1="180" y1="50" x2="180" y2="80" stroke="currentColor" strokeWidth="4" />, // Rope
-      <circle key="head" cx="180" cy="100" r="20" stroke="currentColor" strokeWidth="4" fill="none" />, // Head
-      <line key="body" x1="180" y1="120" x2="180" y2="160" stroke="currentColor" strokeWidth="4" />, // Body
-      <line key="arm-l" x1="180" y1="130" x2="150" y2="150" stroke="currentColor" strokeWidth="4" />, // Left Arm
-      <line key="arm-r" x1="180" y1="130" x2="210" y2="150" stroke="currentColor" strokeWidth="4" />, // Right Arm
-      <line key="leg-l" x1="180" y1="160" x2="150" y2="190" stroke="currentColor" strokeWidth="4" />, // Left Leg
-      <line key="leg-r" x1="180" y1="160" x2="210" y2="190" stroke="currentColor" strokeWidth="4" />, // Right Leg
-    ];
+    const Head = <circle key="head" cx="180" cy="100" r="20" strokeWidth="4" fill="none" stroke="currentColor"/>;
+    const Body = <line key="body" x1="180" y1="120" x2="180" y2="160" strokeWidth="4" stroke="currentColor"/>;
+    const RightArm = <line key="arm-r" x1="180" y1="130" x2="210" y2="150" strokeWidth="4" stroke="currentColor"/>;
+    const LeftArm = <line key="arm-l" x1="180" y1="130" x2="150" y2="150" strokeWidth="4" stroke="currentColor"/>;
+    const RightLeg = <line key="leg-r" x1="180" y1="160" x2="210" y2="190" strokeWidth="4" stroke="currentColor"/>;
+    const LeftLeg = <line key="leg-l" x1="180" y1="160" x2="150" y2="190" strokeWidth="4" stroke="currentColor"/>;
     
+    const bodyParts = [Head, Body, RightArm, LeftArm, RightLeg, LeftLeg];
+
     return (
       <svg viewBox="0 0 250 250" className="w-32 h-32 sm:w-40 sm:h-40 mx-auto mb-4">
-        {parts.slice(0, wrongGuesses + 4).slice(4)}
+          {/* Gallows */}
+          <line x1="60" y1="230" x2="140" y2="230" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+          <line x1="100" y1="230" x2="100" y2="50" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+          <line x1="100" y1="50" x2="180" y2="50" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+          <line x1="180" y1="50" x2="180" y2="80" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+          {/* Body parts */}
+          {bodyParts.slice(0, wrongGuesses).map((part, index) => React.cloneElement(part, { key: `body-part-${index}` }))}
       </svg>
     )
   }
