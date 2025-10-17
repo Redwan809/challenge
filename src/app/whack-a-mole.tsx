@@ -4,7 +4,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Hammer } from 'lucide-react';
+import { Hammer, RefreshCw } from 'lucide-react';
 
 const GAME_DURATION_S = 30;
 
@@ -85,10 +85,10 @@ export default function WhackAMole() {
         
         {!isGameActive ? (
           <Button onClick={startGame} size="lg" className="w-full font-bold">
-            {timeLeft === 0 ? 'Play Again' : 'Start Game'}
+             {timeLeft === 0 ? <><RefreshCw className="mr-2 h-4 w-4" />Play Again</> : 'Start Game'}
           </Button>
         ) : (
-          <div className="text-center text-2xl font-bold text-primary animate-pulse">
+          <div className="text-center text-2xl font-bold text-primary animate-pulse h-11 flex items-center justify-center">
             GO!
           </div>
         )}

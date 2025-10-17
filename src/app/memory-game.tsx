@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { RefreshCw } from 'lucide-react';
@@ -26,7 +26,7 @@ export default function MemoryGame() {
   const [flippedIndices, setFlippedIndices] = useState<number[]>([]);
   const [moves, setMoves] = useState(0);
 
-  const startNewGame = useMemo(() => () => {
+  const startNewGame = useCallback(() => {
     const shuffledIcons = shuffle(cardIcons);
     setCards(shuffledIcons.map((Icon, index) => ({ id: index, Icon, isFlipped: false, isMatched: false })));
     setFlippedIndices([]);
@@ -107,7 +107,9 @@ export default function MemoryGame() {
         {allMatched && moves > 0 && (
           <div className="text-center animate-bounce-in">
             <p className="text-2xl font-bold text-green-500 mb-4">You won in {moves} moves!</p>
-            <Button onClick={startNewGame} size="lg">Play Again</Button>
+            <Button onClick={startNewGame} size="lg">
+                <RefreshCw className="mr-2 h-4 w-4" /> Play Again
+            </Button>
           </div>
         )}
 

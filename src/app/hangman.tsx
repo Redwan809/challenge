@@ -1,9 +1,10 @@
 
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { RefreshCw } from 'lucide-react';
 
 const words = ["react", "nextjs", "tailwind", "firebase", "genkit", "studio"];
 const alphabet = "abcdefghijklmnopqrstuvwxyz".split('');
@@ -84,7 +85,9 @@ export default function Hangman() {
         )}
 
         {isGameOver ? (
-          <Button onClick={startNewGame} size="lg">Play Again</Button>
+          <Button onClick={startNewGame} size="lg">
+              <RefreshCw className="mr-2 h-4 w-4" /> Play Again
+          </Button>
         ) : (
           <div className="flex flex-wrap justify-center gap-1 sm:gap-2">
             {alphabet.map(letter => {

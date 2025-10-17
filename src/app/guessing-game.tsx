@@ -40,12 +40,14 @@ export default function GuessingGame() {
       return;
     }
 
-    setGuesses(prev => prev + 1);
+    const currentGuesses = guesses + 1;
+    setGuesses(currentGuesses);
 
     if (numGuess === targetNumber) {
+      const points = Math.max(10, MAX_NUMBER - (currentGuesses -1) * 5);
       setMessageType('success');
-      setMessage(`You got it in ${guesses + 1} guesses! The number was ${targetNumber}.`);
-      setScore(prev => prev + (MAX_NUMBER - guesses * 5));
+      setMessage(`You got it in ${currentGuesses} guesses! The number was ${targetNumber}. You earned ${points} points.`);
+      setScore(prev => prev + points);
       setGameOver(true);
     } else if (numGuess < targetNumber) {
       setMessageType('hint');
@@ -73,7 +75,7 @@ export default function GuessingGame() {
       </CardHeader>
       <CardContent>
         <div className="text-right font-bold mb-4">Score: <span className="text-primary">{score}</span></div>
-        <Alert variant={messageType === 'error' ? 'destructive' : 'default'} className="mb-6">
+        <Alert variant={messageType === 'error' ? 'destructive' : 'default'} className="mb-6 min-h-[90px]">
           {getAlertIcon()}
           <AlertTitle>{messageType.charAt(0).toUpperCase() + messageType.slice(1)}</AlertTitle>
           <AlertDescription>

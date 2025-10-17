@@ -1,10 +1,11 @@
 
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { RefreshCw } from 'lucide-react';
 
 const colors = ['green', 'red', 'yellow', 'blue'];
 const colorClasses = {
@@ -122,13 +123,13 @@ export default function SimonSays() {
                 ))}
             </div>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 bg-card rounded-full flex items-center justify-center">
-                 <p className="font-bold text-card-foreground text-3xl">SIMON</p>
+                 <p className="font-bold text-card-foreground text-3xl sm:text-4xl">SIMON</p>
             </div>
         </div>
 
         {status === 'start' || status === 'gameover' ? (
           <Button onClick={startGame} size="lg" className="w-full">
-            {status === 'start' ? 'Start Game' : 'Play Again'}
+            {status === 'start' ? 'Start Game' : <><RefreshCw className="mr-2 h-4 w-4"/>Play Again</>}
           </Button>
         ) : (
           <div className="h-11"></div>
