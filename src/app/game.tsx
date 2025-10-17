@@ -42,7 +42,9 @@ export default function Game() {
     }
 
     const handleResize = () => {
+      if(typeof window !== 'undefined'){
         setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+      }
     };
     
     if (typeof window !== 'undefined') {
@@ -158,7 +160,7 @@ export default function Game() {
     return `${(id * 0.2)}s`;
   }
   
-  const isGameOver = status === 'revealed' && selectedBox !== boxOrder.indexOf(ballBoxId);
+  const isGameOver = status === 'revealed' && selectedBox !== null && selectedBox !== boxOrder.indexOf(ballBoxId);
 
   return (
     <>
@@ -191,7 +193,7 @@ export default function Game() {
                   hasBall={id === ballBoxId}
                   isRevealed={status === 'revealed'}
                   isSelected={id === selectedBox}
-                  onClick={() => handleSelectBox(id)}
+                  onClick={() => handleSelectBox(boxOrder.indexOf(id))}
                   isDisabled={status !== 'selecting'}
                 />
               </div>
@@ -233,15 +235,15 @@ export default function Game() {
         </CardContent>
          <style jsx>{`
           @keyframes place-ball {
-            0% { transform: translate(0, -100px) scale(1.2); opacity: 1; }
-            50% { transform: translate(0, 24px) scale(1); opacity: 1; }
-            100% { transform: translate(0, 24px) scale(0); opacity: 0; }
+            0% { transform: translate(${boxPositions[ballBoxId]}%, -100px) scale(1.2); opacity: 1; }
+            50% { transform: translate(${boxPositions[ballBoxId]}%, 24px) scale(1); opacity: 1; }
+            100% { transform: translate(${boxPositions[ballBoxId]}%, 24px) scale(0); opacity: 0; }
           }
           @media (min-width: 640px) {
             @keyframes place-ball {
-              0% { transform: translate(0, -120px) scale(1.2); opacity: 1; }
-              50% { transform: translate(0, 30px) scale(1); opacity: 1; }
-              100% { transform: translate(0, 30px) scale(0); opacity: 0; }
+              0% { transform: translate(${boxPositions[ballBoxId]}%, -120px) scale(1.2); opacity: 1; }
+              50% { transform: translate(${boxPositions[ballBoxId]}%, 30px) scale(1); opacity: 1; }
+              100% { transform: translate(${boxPositions[ballBoxId]}%, 30px) scale(0); opacity: 0; }
             }
           }
         `}</style>

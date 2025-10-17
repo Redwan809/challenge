@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Hammer, RefreshCw } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const GAME_DURATION_S = 30;
 const MOLE_APPEAR_SPEED_MS = 800;
@@ -15,15 +16,27 @@ export default function WhackAMole() {
   const [activeMole, setActiveMole] = useState<number | null>(null);
   const [isGameActive, setIsGameActive] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [whacked, setWhacked] = useState<number | null>(null);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const gameLoopRef = useRef<NodeJS.Timeout | null>(null);
+  const isMounted = useRef(true);
+  
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+      if (timerRef.current) clearInterval(timerRef.current);
+      if (gameLoopRef.current) clearInterval(gameLoopRef.current);
+    }
+  }, []);
 
   const popMole = useCallback(() => {
     setActiveMole(Math.floor(Math.random() * 9));
   }, []);
 
   const stopGame = useCallback(() => {
+    if (!isMounted.current) return;
     setIsGameActive(false);
     setIsGameOver(true);
     setActiveMole(null);
@@ -43,13 +56,17 @@ export default function WhackAMole() {
     setIsGameOver(false);
     setIsGameActive(true);
   };
-
+  
   useEffect(() => {
     if (isGameActive) {
       popMole(); // Initial mole
       gameLoopRef.current = setInterval(popMole, MOLE_APPEAR_SPEED_MS);
 
       timerRef.current = setInterval(() => {
+        if (!isMounted.current) {
+          if(timerRef.current) clearInterval(timerRef.current);
+          return;
+        }
         setTimeLeft(prev => {
           if (prev <= 1) {
             stopGame();
@@ -73,8 +90,9 @@ export default function WhackAMole() {
   const whackMole = (index: number) => {
     if (index === activeMole && isGameActive) {
       setScore(prev => prev + 1);
+      setWhacked(index);
+      setTimeout(() => setWhacked(null), 200);
       
-      // Immediately pop a new mole and reset interval to keep it snappy
       if (gameLoopRef.current) {
          clearInterval(gameLoopRef.current);
       }
@@ -103,10 +121,13 @@ export default function WhackAMole() {
               role="button"
               aria-label={`mole-hole-${index}`}
             >
-                <div className={`transform transition-transform duration-150 ${activeMole === index ? 'translate-y-0' : 'translate-y-full'}`}>
+                <div className={cn('transform transition-transform duration-150', activeMole === index ? 'translate-y-0' : 'translate-y-full')}>
                     <Mole />
                 </div>
-                <Hammer className={`absolute text-white/70 w-8 h-8 opacity-0 group-active:opacity-100 transform -rotate-45 -translate-x-4 -translate-y-2 transition-opacity`}/>
+                <Hammer className={cn(
+                  'absolute text-white/70 w-8 h-8 transition-opacity duration-100',
+                   whacked === index ? 'opacity-100' : 'opacity-0 group-active:opacity-100 transform -rotate-45 -translate-x-4 -translate-y-2'
+                )}/>
             </div>
           ))}
         </div>

@@ -209,7 +209,7 @@ export default function TicTacToe() {
                     <Square key={index} value={value} index={index} isWinning={winnerInfo.line.includes(index)} />
                 ))}
             </div>
-            {winnerInfo.line.length > 0 && (
+            {winnerInfo.winner && winnerInfo.line.length > 0 && (
                 <svg className="absolute top-0 left-0 w-full h-full pointer-events-none" viewBox="0 0 100 100">
                     <line 
                         x1={((winnerInfo.line[0] % 3) * 33.3) + 16.6}
@@ -219,7 +219,7 @@ export default function TicTacToe() {
                         className="stroke-accent"
                         strokeWidth="5"
                         strokeLinecap="round"
-                        style={{animation: "draw-line 1s ease-out forwards", strokeDasharray: 1000}}
+                        style={{animation: "draw-line 1s ease-out forwards", strokeDasharray: 1000, strokeDashoffset: 1000}}
                     />
                 </svg>
             )}
