@@ -11,6 +11,7 @@ import WhackAMole from './whack-a-mole';
 import Hangman from './hangman';
 import SimonSays from './simon-says';
 import { Gift, Puzzle, Hand, BrainCircuit, Hammer, VenetianMask, Gamepad2, Brain } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 type ActiveGame = 'none' | 'mystery-box' | 'guessing-game' | 'rock-paper-scissors' | 'tic-tac-toe' | 'memory-game' | 'whack-a-mole' | 'hangman' | 'simon-says';
 
@@ -64,7 +65,12 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen w-full flex-col items-center justify-center p-4 sm:p-8 relative">
+    <main 
+      className={cn(
+        "flex min-h-screen w-full flex-col items-center justify-center p-4 sm:p-8 relative",
+        activeGame !== 'none' && "overflow-hidden"
+      )}
+    >
        {activeGame !== 'none' && (
          <button onClick={resetToHome} className="absolute top-24 left-4 text-primary font-bold z-50 bg-card/80 px-3 py-1 rounded-full shadow-md hover:bg-card transition-colors">
            &larr; Back to Games
