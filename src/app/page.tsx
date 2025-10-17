@@ -20,7 +20,7 @@ export default function Home() {
             <SidebarMenuItem>
               <SidebarMenuButton>
                 <Puzzle />
-                Games
+                bet
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
