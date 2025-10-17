@@ -12,10 +12,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  bodyClassName,
 }: Readonly<{
   children: React.ReactNode;
-  bodyClassName?: string;
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -26,7 +24,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
-      <body className={cn("font-body antialiased", bodyClassName)}>
+      <body className="font-body antialiased overflow-hidden">
         <Header />
         <div id="main-content" className="h-screen overflow-y-auto pb-20">
           {children}

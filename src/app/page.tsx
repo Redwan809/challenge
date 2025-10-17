@@ -19,12 +19,13 @@ export default function Home() {
   const [activeGame, setActiveGame] = useState<ActiveGame>('none');
 
   useEffect(() => {
-    if (activeGame !== 'none') {
-      document.body.classList.add('overflow-hidden');
-      document.getElementById('main-content')?.classList.remove('overflow-y-auto');
-    } else {
-      document.body.classList.remove('overflow-hidden');
-      document.getElementById('main-content')?.classList.add('overflow-y-auto');
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+      if (activeGame !== 'none') {
+        mainContent.classList.remove('overflow-y-auto');
+      } else {
+        mainContent.classList.add('overflow-y-auto');
+      }
     }
   }, [activeGame]);
 
