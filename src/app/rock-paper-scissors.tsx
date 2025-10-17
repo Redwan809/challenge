@@ -60,12 +60,12 @@ export default function RockPaperScissors() {
 
     if (result === 'win') {
       text = 'You Win!';
-      icon = <Trophy className="mr-2 text-yellow-400" />;
-      textColor = 'text-green-500';
+      icon = <Trophy className="mr-2 text-accent" />;
+      textColor = 'text-primary';
     } else if (result === 'lose') {
       text = 'You Lose!';
       icon = <XCircle className="mr-2" />;
-      textColor = 'text-red-500';
+      textColor = 'text-destructive';
     } else {
       text = "It's a Draw!";
       icon = <Minus className="mr-2" />;

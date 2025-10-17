@@ -144,9 +144,9 @@ export default function TicTacToe() {
   
   const getStatusIcon = () => {
       if (winnerInfo.winner) {
-        if (winnerInfo.winner === 'draw') return <Minus className="text-gray-500"/>;
-        if (winnerInfo.winner === HUMAN_PLAYER) return <Award className="text-yellow-500" />;
-        return <Bot className="text-red-500"/>;
+        if (winnerInfo.winner === 'draw') return <Minus className="text-muted-foreground"/>;
+        if (winnerInfo.winner === HUMAN_PLAYER) return <Award className="text-accent" />;
+        return <Bot className="text-destructive"/>;
       }
       return currentPlayer === HUMAN_PLAYER ? <User /> : <BrainCircuit className="animate-pulse" />;
   }
@@ -178,7 +178,7 @@ export default function TicTacToe() {
     <Card className="w-full max-w-2xl bg-card/80 backdrop-blur-sm shadow-2xl rounded-2xl">
       <CardHeader>
         <CardTitle className="text-center text-3xl font-headline flex items-center justify-center gap-2">
-            <Star className="text-yellow-400"/> Tic-Tac-Toe Pro <Star className="text-yellow-400"/>
+            <Star className="text-accent"/> Tic-Tac-Toe Pro <Star className="text-accent"/>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -216,7 +216,7 @@ export default function TicTacToe() {
                         y1={(Math.floor(winnerInfo.line[0] / 3) * 33.3) + 16.6}
                         x2={((winnerInfo.line[2] % 3) * 33.3) + 16.6}
                         y2={(Math.floor(winnerInfo.line[2] / 3) * 33.3) + 16.6}
-                        className="stroke-yellow-400"
+                        className="stroke-accent"
                         strokeWidth="5"
                         strokeLinecap="round"
                         style={{animation: "draw-line 1s ease-out forwards", strokeDasharray: 1000}}

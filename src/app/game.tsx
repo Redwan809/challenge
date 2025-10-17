@@ -26,7 +26,7 @@ export default function Game() {
 
   const [boxOrder, setBoxOrder] = useState<number[]>(Array.from({ length: boxCount }, (_, i) => i));
   const [selectedBox, setSelectedBox] = useState<number | null>(null);
-  const [message, setMessage] = useState<{ text: string; icon: React.ReactNode }>({ text: 'Click Start to Play!', icon: <PartyPopper className="text-accent-foreground" /> });
+  const [message, setMessage] = useState<{ text: string; icon: React.ReactNode }>({ text: 'Click Start to Play!', icon: <PartyPopper className="text-accent" /> });
   const [isAnimatingBall, setIsAnimatingBall] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
 
@@ -54,6 +54,7 @@ export default function Game() {
       if (typeof window !== 'undefined') {
         window.removeEventListener('resize', handleResize);
       }
+      isMounted.current = false;
     };
   }, []);
 
@@ -79,6 +80,7 @@ export default function Game() {
 
     for (let i = 0; i < SHUFFLE_COUNT + level; i++) {
         await new Promise(resolve => setTimeout(resolve, shuffleSpeed));
+        if (!isMounted.current) return;
         
         // Simple swap logic for animation
         const [idx1, idx2] = [Math.floor(Math.random() * boxCount), Math.floor(Math.random() * boxCount)];
@@ -89,6 +91,7 @@ export default function Game() {
     }
 
     await new Promise(resolve => setTimeout(resolve, shuffleSpeed + 100));
+    if (!isMounted.current) return;
     setStatus('selecting');
     setMessage({ text: 'Where is the ball? Select a box!', icon: null });
 
@@ -112,6 +115,7 @@ export default function Game() {
     setIsAnimatingBall(true);
 
     setTimeout(() => {
+      if (!isMounted.current) return;
       setIsAnimatingBall(false);
       handleShuffle();
     }, 1500);
@@ -164,7 +168,7 @@ export default function Game() {
           <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6 gap-4">
             <div className="flex gap-4 order-2 sm:order-1 text-center">
                 <h3 className="font-bold text-lg">Level: <span className="text-primary font-headline text-2xl">{level}</span></h3>
-                <h3 className="font-bold text-lg flex items-center gap-1"><Trophy className="text-yellow-400"/> High Score: <span className="text-primary font-headline text-2xl">{highScore}</span></h3>
+                <h3 className="font-bold text-lg flex items-center gap-1"><Trophy className="text-accent"/> High Score: <span className="text-primary font-headline text-2xl">{highScore}</span></h3>
             </div>
             <div className="text-center min-h-[2.5rem] flex items-center justify-center font-bold text-base sm:text-lg animate-bounce-in order-1 sm:order-2">
               {message.icon}

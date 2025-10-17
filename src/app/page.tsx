@@ -33,14 +33,14 @@ export default function Home() {
   }, [activeGame]);
 
   const games = [
-    { id: 'mystery-box', icon: <Gift className="w-12 h-12 text-primary" />, name: 'Mystery Box' },
-    { id: 'guessing-game', icon: <Puzzle className="w-12 h-12 text-primary" />, name: 'Guess It' },
-    { id: 'rock-paper-scissors', icon: <Hand className="w-12 h-12 text-primary" />, name: 'R-P-S' },
-    { id: 'tic-tac-toe', icon: <Gamepad2 className="w-12 h-12 text-primary" />, name: 'Tic Tac Toe' },
-    { id: 'memory-game', icon: <BrainCircuit className="w-12 h-12 text-primary" />, name: 'Memory' },
-    { id: 'whack-a-mole', icon: <Hammer className="w-12 h-12 text-primary" />, name: 'Whack-a-Mole' },
-    { id: 'hangman', icon: <VenetianMask className="w-12 h-12 text-primary" />, name: 'Hangman' },
-    { id: 'simon-says', icon: <Brain className="w-12 h-12 text-primary" />, name: 'Simon Says' },
+    { id: 'mystery-box', icon: <Gift className="w-12 h-12" />, name: 'Mystery Box' },
+    { id: 'guessing-game', icon: <Puzzle className="w-12 h-12" />, name: 'Guess It' },
+    { id: 'rock-paper-scissors', icon: <Hand className="w-12 h-12" />, name: 'R-P-S' },
+    { id: 'tic-tac-toe', icon: <Gamepad2 className="w-12 h-12" />, name: 'Tic Tac Toe' },
+    { id: 'memory-game', icon: <BrainCircuit className="w-12 h-12" />, name: 'Memory' },
+    { id: 'whack-a-mole', icon: <Hammer className="w-12 h-12" />, name: 'Whack-a-Mole' },
+    { id: 'hangman', icon: <VenetianMask className="w-12 h-12" />, name: 'Hangman' },
+    { id: 'simon-says', icon: <Brain className="w-12 h-12" />, name: 'Simon Says' },
   ];
 
   const renderGame = () => {
@@ -62,7 +62,7 @@ export default function Home() {
                 className="flex flex-col items-center justify-center cursor-pointer group"
                 onClick={() => setActiveGame(game.id as ActiveGame)}
               >
-                <div className="p-6 bg-card/80 backdrop-blur-sm rounded-3xl shadow-2xl transform group-hover:scale-110 transition-transform duration-300 w-full aspect-square flex flex-col justify-center items-center">
+                <div className="p-6 bg-card/80 backdrop-blur-sm rounded-3xl shadow-2xl transform group-hover:scale-110 transition-transform duration-300 w-full aspect-square flex flex-col justify-center items-center text-primary">
                   {game.icon}
                   <p className="mt-2 text-sm sm:text-base font-bold text-foreground/80 text-center">{game.name}</p>
                 </div>
