@@ -75,7 +75,7 @@ export default function Hangman() {
         <HangmanDrawing />
         {isGameOver ? (
             <div className="text-center mb-8">
-                <p className={`text-2xl sm:text-3xl font-bold mb-2 ${isWinner ? 'text-green-500' : 'text-red-500'}`}>
+                <p className={`text-2xl sm:text-3xl font-bold mb-2 ${isWinner ? 'text-primary' : 'text-destructive'}`}>
                     {isWinner ? 'You Win!' : 'You Lose!'}
                 </p>
                 <p className="text-lg sm:text-xl">The word was: <span className="font-bold text-primary">{word.toUpperCase()}</span></p>

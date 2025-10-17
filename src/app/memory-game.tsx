@@ -95,7 +95,7 @@ export default function MemoryGame() {
                     <div className="w-full h-full bg-muted hover:bg-muted/80 rounded-lg cursor-pointer"></div>
                 </div>
                 <div className={cn("absolute w-full h-full backface-hidden rotate-y-180", card.isFlipped ? "z-10" : "z-0")}>
-                    <div className={cn("w-full h-full rounded-lg flex items-center justify-center", card.isMatched ? "bg-green-500/20 text-green-500" : "bg-primary/20 text-primary")}>
+                    <div className={cn("w-full h-full rounded-lg flex items-center justify-center", card.isMatched ? "bg-primary/20 text-primary" : "bg-accent/20 text-accent")}>
                         <card.Icon className="w-1/2 h-1/2" />
                     </div>
                 </div>
@@ -106,7 +106,7 @@ export default function MemoryGame() {
         
         {allMatched && moves > 0 && (
           <div className="text-center animate-bounce-in">
-            <p className="text-2xl font-bold text-green-500 mb-4">You won in {moves} moves!</p>
+            <p className="text-2xl font-bold text-primary mb-4">You won in {moves} moves!</p>
             <Button onClick={startNewGame} size="lg">
                 <RefreshCw className="mr-2 h-4 w-4" /> Play Again
             </Button>

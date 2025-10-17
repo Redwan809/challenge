@@ -35,7 +35,7 @@ export default function Game() {
   const isMounted = useRef(false);
 
   useEffect(() => {
-    // Load high score from localStorage only on the client
+    isMounted.current = true;
     const storedHighScore = localStorage.getItem('mysteryBoxHighScore');
     if (storedHighScore) {
         setHighScore(parseInt(storedHighScore, 10));
@@ -44,10 +44,17 @@ export default function Game() {
     const handleResize = () => {
         setWindowSize({ width: window.innerWidth, height: window.innerHeight });
     };
-    window.addEventListener('resize', handleResize);
-    handleResize();
-    isMounted.current = true;
-    return () => window.removeEventListener('resize', handleResize);
+    
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+      handleResize();
+    }
+    
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize);
+      }
+    };
   }, []);
 
   const boxPositions = useMemo(() => {
@@ -130,7 +137,7 @@ export default function Game() {
     const correct = boxId === boxOrder.indexOf(ballBoxId);
 
     if (correct) {
-      setMessage({ text: `Correct! Well done! 🎉`, icon: <PartyPopper className="text-green-500" /> });
+      setMessage({ text: `Correct! Well done! 🎉`, icon: <PartyPopper className="text-primary" /> });
       setShowConfetti(true);
       if (level >= highScore) {
         const newHighScore = level;
@@ -138,7 +145,7 @@ export default function Game() {
         localStorage.setItem('mysteryBoxHighScore', newHighScore.toString());
       }
     } else {
-      setMessage({ text: "Game Over! Better luck next time.", icon: <XCircle className="text-red-500" /> });
+      setMessage({ text: "Game Over! Better luck next time.", icon: <XCircle className="text-destructive" /> });
       setLevel(1); // Reset level
     }
   };
@@ -151,7 +158,7 @@ export default function Game() {
 
   return (
     <>
-      {showConfetti && windowSize.width > 0 && <Confetti width={windowSize.width} height={windowSize.height} recycle={false} numberOfPieces={200} />}
+      {showConfetti && windowSize.width > 0 && isMounted.current && <Confetti width={windowSize.width} height={windowSize.height} recycle={false} numberOfPieces={200} />}
       <Card className="w-full max-w-4xl bg-card/80 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden">
         <CardContent className="p-4 sm:p-6">
           <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6 gap-4">
@@ -238,4 +245,3 @@ export default function Game() {
     </>
   );
 }
-
