@@ -91,7 +91,7 @@ export default function SimonSays() {
   }
 
   return (
-    <Card className="w-full max-w-md bg-card/80 backdrop-blur-sm shadow-2xl rounded-2xl">
+    <Card className="w-full max-w-xl bg-card/80 backdrop-blur-sm shadow-2xl rounded-2xl">
       <CardHeader>
         <CardTitle className="text-center text-3xl font-headline">Simon Says</CardTitle>
       </CardHeader>
@@ -137,4 +137,3 @@ export default function SimonSays() {
     </Card>
   );
 }
-

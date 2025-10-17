@@ -63,7 +63,7 @@ export default function WhackAMole() {
   }, [isGameActive, getRandomMole]);
   
   return (
-    <Card className="w-full max-w-md bg-card/80 backdrop-blur-sm shadow-2xl rounded-2xl">
+    <Card className="w-full max-w-xl bg-card/80 backdrop-blur-sm shadow-2xl rounded-2xl">
       <CardHeader>
         <CardTitle className="text-center text-3xl font-headline">Whack-a-Mole</CardTitle>
       </CardHeader>
@@ -107,4 +107,3 @@ const Mole = () => (
         <Hammer className="absolute text-white/70 w-8 h-8 opacity-0 group-hover:opacity-100 transform -rotate-45 -translate-x-4 -translate-y-2 transition-opacity"/>
     </div>
 );
-
