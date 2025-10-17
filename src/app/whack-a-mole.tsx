@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Hammer, RefreshCw } from 'lucide-react';
@@ -14,53 +14,60 @@ export default function WhackAMole() {
   const [activeMole, setActiveMole] = useState<number | null>(null);
   const [isGameActive, setIsGameActive] = useState(false);
 
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const gameLoopRef = useRef<NodeJS.Timeout | null>(null);
+
   const startGame = () => {
     setScore(0);
     setTimeLeft(GAME_DURATION_S);
     setIsGameActive(true);
+    setActiveMole(null);
   };
 
+  const stopGame = useCallback(() => {
+    setIsGameActive(false);
+    setActiveMole(null);
+    if (timerRef.current) clearInterval(timerRef.current);
+    if (gameLoopRef.current) clearInterval(gameLoopRef.current);
+  }, []);
+
+
   const whackMole = (index: number) => {
-    if (index === activeMole) {
+    if (index === activeMole && isGameActive) {
       setScore(prev => prev + 1);
-      setActiveMole(null); // Prevent multiple whacks
+      setActiveMole(null);
+       if (gameLoopRef.current) {
+         clearInterval(gameLoopRef.current);
+         gameLoopRef.current = setInterval(getRandomMole, 800);
+       }
     }
   };
 
   const getRandomMole = useCallback(() => {
       let newMole = Math.floor(Math.random() * 9);
-      if (newMole === activeMole) {
-          // ensure it's a new mole
-          newMole = (newMole + 1) % 9;
-      }
       setActiveMole(newMole);
-  }, [activeMole]);
+  }, []);
 
   useEffect(() => {
-    if (!isGameActive) return;
-
-    const gameInterval = setInterval(() => {
-      getRandomMole();
-    }, 800); // Mole appearance speed
-
-    const timerInterval = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          setIsGameActive(false);
-          setActiveMole(null);
-          clearInterval(gameInterval);
-          clearInterval(timerInterval);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+    if (isGameActive) {
+      gameLoopRef.current = setInterval(getRandomMole, 800);
+      timerRef.current = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            stopGame();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else {
+        stopGame();
+    }
 
     return () => {
-      clearInterval(gameInterval);
-      clearInterval(timerInterval);
+      stopGame();
     };
-  }, [isGameActive, getRandomMole]);
+  }, [isGameActive, getRandomMole, stopGame]);
   
   return (
     <Card className="w-full max-w-xl bg-card/80 backdrop-blur-sm shadow-2xl rounded-2xl">
