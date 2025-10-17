@@ -22,6 +22,16 @@ export function BottomNav() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={(e) => {
+                if (item.href === pathname && item.href === '/') {
+                  e.preventDefault();
+                  // Instead of navigating, we might want to trigger a state change in the page component.
+                  // For now, we'll just prevent the navigation to allow the internal page state to handle it.
+                  // A better solution would involve a shared state (e.g., via Context or Zustand).
+                  // Or, force a reload, which is simple but less elegant:
+                  window.location.href = '/';
+                }
+              }}
               className={cn(
                 "inline-flex flex-col items-center justify-center px-5 hover:bg-muted/50 group",
                 isActive ? "text-primary" : "text-foreground/60"

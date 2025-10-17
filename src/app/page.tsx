@@ -41,8 +41,17 @@ export default function Home() {
     }
   };
 
+  const resetToHome = () => {
+    setActiveGame('none');
+  };
+
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center p-4 sm:p-8 relative">
+      {activeGame !== 'none' && (
+         <button onClick={resetToHome} className="absolute top-24 left-4 text-primary font-bold z-50">
+           &larr; Back to Games
+         </button>
+      )}
       {renderGame()}
     </main>
   );
