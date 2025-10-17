@@ -15,9 +15,9 @@ export const GiftBox = ({ hasBall, isRevealed, isSelected, isDisabled, onClick }
       onClick={isDisabled ? undefined : onClick}
       className={cn(
         "relative w-28 h-28 sm:w-32 md:w-40 sm:h-32 md:h-40 cursor-pointer group transition-transform duration-300",
-        !isDisabled && "hover:-translate-y-2",
+        !isDisabled && "hover:scale-110",
         isSelected && !isRevealed && "scale-110",
-        isRevealed && !isSelected && "opacity-60 saturate-50"
+        isRevealed && !isSelected && "opacity-50 saturate-50 scale-90"
       )}
       aria-disabled={isDisabled}
     >
@@ -28,7 +28,15 @@ export const GiftBox = ({ hasBall, isRevealed, isSelected, isDisabled, onClick }
           </div>
         )}
         <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-lg">
-          <g className={cn("transition-transform duration-500 ease-in-out", isRevealed && "-translate-y-12 sm:-translate-y-16 rotate-[-15deg] scale-110")}>
+          {/* Shimmer Effect */}
+          <foreignObject x="0" y="0" width="100" height="100">
+             <div className="w-full h-full overflow-hidden absolute">
+                <div className="w-full h-full bg-primary absolute opacity-20 "/>
+                <div className="w-[500%] h-[500%] absolute -top-full -left-1/2 animate-shimmer bg-gradient-to-br from-transparent via-primary to-transparent opacity-30"/>
+             </div>
+          </foreignObject>
+          
+          <g className={cn("transition-transform duration-500 ease-in-out origin-bottom", isRevealed && "lid-open")}>
             {/* Lid */}
             <path d="M10 25 L50 10 L90 25 L50 40 Z" fill="hsl(var(--primary))" stroke="hsl(var(--primary-foreground))" strokeWidth="1"/>
             <path d="M10 25 L10 45 L50 60 L50 40 Z" fill="hsl(var(--primary) / 0.8)" stroke="hsl(var(--primary-foreground))" strokeWidth="1"/>
@@ -45,8 +53,11 @@ export const GiftBox = ({ hasBall, isRevealed, isSelected, isDisabled, onClick }
           </g>
         </svg>
       </div>
+      <style jsx>{`
+        .lid-open {
+            transform: translateY(-50%) rotate(-25deg) translateX(-10%);
+        }
+      `}</style>
     </div>
   );
 };
-
-    
