@@ -112,7 +112,7 @@ export default function Game() {
 
   return (
     <>
-      {showConfetti && <Confetti width={windowSize.width} height={windowSize.height} recycle={false} numberOfPieces={200} />}
+      {showConfetti && windowSize.width > 0 && <Confetti width={windowSize.width} height={windowSize.height} recycle={false} numberOfPieces={200} />}
       <Card className="w-full max-w-2xl bg-card/80 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden">
         <CardContent className="p-4 sm:p-6">
           <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6 gap-4">
